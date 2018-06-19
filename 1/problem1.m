@@ -1,13 +1,15 @@
 A = [6 3; 1 3];
 E = [1 0; 0 0];
 
-h = linspace(0,5,51);
+% h = [0:5:0.01];
+h = linspace(0,0.1,1001);
 
 ans = zeros(1, length(h));
 for i=1:length(h)
 	ans(i) = norm(inv(A + h(i)*E) - (inv(A)-h(i)*inv(A)*E*inv(A)));
 end
 
-% plot(h, ans);
 loglog(h,ans);
 
+logh = log(h);
+logans = log(ans);
