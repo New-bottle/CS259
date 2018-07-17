@@ -6,7 +6,6 @@ X = [X, ones(length(Y), 1)];
 
 
 % initial
-% W = [5, -4];
 % Ax=b ---> x=A\B
 
 W = [0; 0];
@@ -14,7 +13,7 @@ optimal_w =  X' * X \ X' * Y
 
 alpha = 0.0005;
 ite_steps = 1000;
-cost_sgd = zeros(1, length(Y));
+cost_sgd = zeros(1, ite_steps);
 
 cost = ((X*W-Y)'*(X*W-Y))^0.5;
 
