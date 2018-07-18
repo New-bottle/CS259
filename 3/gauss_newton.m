@@ -18,7 +18,7 @@ for i = 1:len
 	phi = phi + exp(tmp(i)^2);
 end
 phi = phi - 1;
-% ===== calculate phi ===== %
+% ===== iterate ===== %
 
 x = [0; 0];
 errors = zeros(1, max_step);
