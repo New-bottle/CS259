@@ -1,0 +1,39 @@
+\documentclass[a4paper, 11pt]{article}
+\usepackage{lipsum} %This package just generates Lorem Ipsum filler text. 
+\usepackage{fullpage} % changes the margin
+\usepackage{mathpazo}
+\usepackage{multicol}
+\usepackage{graphicx}
+\usepackage{enumerate}
+\usepackage{amsmath,amsfonts,amsthm} % Math packages
+\usepackage{listings}
+
+\begin{document}
+%Header-Make sure you update this information!!!!
+\noindent
+\large\textbf{Homework 5} \hfill \textbf{Hongyu Yan (516030910595)} \\
+\normalsize {\bf CS 259 Numerical Methods for Data Science} \hfill ACM Class, Zhiyuan College, SJTU\\
+Prof.~{\bf David Bindel} \hfill Due Date: June 27, 2018\\
+TA.~{\bf Yurong You, Xinran Zhu} \hfill Submit Date: \today
+
+\section*{Problem 1}
+As $A$ is symmetric, the difference between $\Lambda$ and $\Sigma$ is that
+the values in the diagonal of $\Sigma$ are non-negative and in descending order,
+while those in $\Lambda$ are not necessarily positive and unordered.
+
+To compute the SVD, we can make it by change the sign of negative entries of $\Lambda$
+and sort them in descending order.
+
+So the alogrithm can be described as:
+\begin{enumerate}
+\item Generate proper matrix $L$ s.t. $L\Lambda$ is non-negative. In other words, if $\Lambda_{ii} \leq 0$, then $L_{ii} = -1$, otherwise $L_{ii} = 1$.
+\item Generate proper elementary matrix $T$ s.t. $T(L\Lambda)T$ is the matrix that
+the values in the diagonal are in descending order.
+\item So that $\Sigma = TL\Lambda T$, and we have $A = Q\Lambda Q^T = Q(TL)^{-1}(TL\Lambda T)T^{-1}Q = Q(TL)^{-1}\Sigma T^{-1}Q$. So $U = Q(TL)^{-1}$, $V=(T^{-1}Q)^T$.
+\end{enumerate}
+The time complexity of this algorithm is $O(n^2)$, because generating the sorted matrix needs $O(n^2)$.
+
+By the way, I think it's also ok by sorting values in $O(nlogn)$ then generating the matrix $T$ in $O(n)$.
+\section*{Problem 2}
+
+\end{document}
