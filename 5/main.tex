@@ -22,7 +22,7 @@ the values in the diagonal of $\Sigma$ are non-negative and in descending order,
 while those in $\Lambda$ are not necessarily positive and unordered.
 
 To compute the SVD, we can make it by change the sign of negative entries of $\Lambda$
-and sort them in descending order.
+and sort them in descending order. 
 
 So the alogrithm can be described as:
 \begin{enumerate}
@@ -36,4 +36,106 @@ The time complexity of this algorithm is $O(n^2)$, because generating the sorted
 By the way, I think it's also ok by sorting values in $O(nlogn)$ then generating the matrix $T$ in $O(n)$.
 \section*{Problem 2}
 
+Suppose there are n points $x_1, x_2, \cdots, x_n$, so $A \in \mathbb{R}^{n \times n}$. 
+$ X = 
+\begin{bmatrix}
+x_1^T \\
+x_2^T \\
+\vdots \\
+x_n^T
+\end{bmatrix}
+$, $X \in \mathbb{R}^{n \times d}$
+
+The purpose is to prove that $B = XX^T$, and we have one solution for $X$ as 
+$X = \begin{bmatrix}
+B_{11} \\
+B_{12} 
+\end{bmatrix} R_{11}^{-1}$.
+
+First, from the definition of B, we got:
+
+\begin{align*}
+B & = -\frac{1}{2}JAJ \\
+  & = -\frac{1}{2}(I-\frac{ee^T}{n})A(I-\frac{ee^T}{n}) \\
+  & = -\frac{1}{2}(A-A\frac{ee^T}{n} - \frac{ee^T}{n}A + \frac{ee^T}{n}A\frac{ee^T}{n})
+\end{align*}
+
+Specifically, we have:
+$$
+B_{ij} = -\frac{1}{2}(A_{ij} - \frac{1}{n}\sum_{k=1}^n A_{ik}-\frac{1}{n}\sum_{l=1}^n A_{lj}+\frac{1}{n^2} \sum_{k=1}^n \sum_{l=1}^n A_{lk})
+$$
+
+Because $A_{ij} = \| x_i - x_j \| ^2 = \| x_i \|^2-2<x_i,x_j>+\|x_j\|^2$, substitute it into previous equation, we get:
+$$
+B_{ij}=-\frac{1}{2}(A_{ij}-\|x_i\|^2-\|x_j\|^2)=<x_i,x_j>
+$$
+So $B=XX^T$ and B is positive semi-definite.
+
+Second, we will prove that $X = \begin{bmatrix}
+B_{11} \\
+B_{12} 
+\end{bmatrix} R_{11}^{-1}$ is a solution.
+
+Suppose there are d "landmark" points, then we can split $X$ into $\begin{bmatrix}
+X_1^T \\ X_2^T
+\end{bmatrix}$, where $X_1$ contains the d "landmark" points, and $X_2$ contains the other $n-k$ points. So $$ B = XX^T = \begin{bmatrix}
+X_1^T \\ X_2^T
+\end{bmatrix} \begin{bmatrix}
+X_1 & X_2
+\end{bmatrix}= \begin{bmatrix}
+X_1^TX_1& X_1^TX_2 \\
+X_2^TX_1& X_2^TX_2 
+\end{bmatrix}= \begin{bmatrix}
+B_{11} & B_{12} \\
+B_{21} & B_{22} 
+\end{bmatrix} $$
+ $$B_{12} = B_{21}^T $$
+
+Since $B_{11} = R_{11}^TR_{11} $, so
+\begin{align*}
+B_{11} &= R_{11}^TR_{11} \\
+B_{12} &= R_{11}^T(B_{21}R_{11}^{-1})^T \\
+B_{21} &= B_{21}R_{11}^{-1}R_{11} \\
+B_{22} &= X_2^T X_2 \\
+	   &= X_2^T X_1 (X_1^T X_1)^{-1} X_1^T X_2 \\
+	   &= X_2^T X_1(B_{11})^{-1} X_1^T X_2 \\
+	   &= B_{21}R_{11}^{-1}(R_{11}^T)^{-1}B_{21}^T \\
+	   &= (B_{21}R_{11}^{-1})(B_{21}R_{11}^{-1})^T
+\end{align*}
+so that:
+$$
+B=\begin{bmatrix}
+R_{11}^T R_{11} & R_{11}^T(B_{21}R_{11}^{-1})^T \\
+B_{21}R_{11}^{-1}R_{11} & (B_{21}R_{11}^{-1})(B_{21}R_{11}^{-1})^T 
+\end{bmatrix} = \begin{bmatrix}
+B_{11} \\ B_{21}
+\end{bmatrix} R_{11}^{-1} ( \begin{bmatrix}
+B_{11} \\ B_{21}
+\end{bmatrix} R_{11}^{-1})^T
+$$
+
+\section*{Problem 3}
+
+\begin{align*}
+\| A-LMR \|_F^2 &= tr((A-LMR)^T(A-LMR)) \\
+			    &= tr((A^T-R^TM^TL^T)(A-LMR)) \\
+			    &= tr(A^TA-R^TM^TL^TA-A^TLMR+R^TM^TL^TLMR) \\
+			    &= tr(A^TA)-2tr(R^TM^TL^TA)+tr(R^TM^TL^TLMR)
+\end{align*}
+We get the minimum when the derivative of $\| A-LMR\|_{F}^2 $ equals 0.
+Because
+\begin{align*}
+ \frac{\partial tr(A^TA)}{\partial M} &= 0 \\
+ \frac{\partial tr(R^TM^TL^TA)}{\partial M} &= \frac{\partial tr(M^TL^TAR^T)}{\partial M} = L^TAR^T \\
+ \frac{\partial tr(R^TM^TL^TLMR)}{\partial M} &= 2L^TLMRR^T
+\end{align*}
+so that
+$$
+\frac{\partial \| A-LMR \|_F^2}{\partial M} = -2L^TAR^T + 2L^TLMRR^T=0
+$$
+which means
+\begin{align*}
+L^TAR^T &= L^TLMRR^T \\
+M &= (LTL)^{-1}L^T A R^T(RR^T)^{-1} = L^\dagger A R^\dagger
+\end{align*}
 \end{document}
